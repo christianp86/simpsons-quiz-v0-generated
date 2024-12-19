@@ -1,16 +1,22 @@
-<script>
-  import '../app.css';
+<script lang="ts">
+	import '../app.css';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 </script>
 
-<div class="min-h-screen bg-blue-400 flex flex-col items-center justify-center p-4">
-  <slot />
+<SvelteToast />
+
+<div class="flex min-h-screen flex-col items-center justify-center bg-blue-400 p-4">
+	<slot />
 </div>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
 
-  :global(body) {
-    font-family: 'Comic Neue', cursive;
-  }
+	:global(body) {
+		font-family: 'Comic Neue', cursive;
+	}
+
+	:global(.svelte-toast) {
+		font-family: 'Comic Neue', cursive;
+	}
 </style>
-

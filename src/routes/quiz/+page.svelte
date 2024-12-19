@@ -3,11 +3,13 @@
 	import { goto } from '$app/navigation';
 	import { playerName, score, currentQuestionIndex, questions } from '$lib/stores/quizStore';
 	import type { Question } from '$lib/types/quiz';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let currentQuestion: Question | undefined;
 	let options: string[] = [];
 	let fiftyFiftyUsed: boolean = false;
 	let correctAnswerUsed: boolean = false;
+	let shakeScreen: boolean = false;
 
 	onMount(() => {
 		if (!$playerName) {
@@ -43,7 +45,17 @@
 				goto('/game-over');
 			} else {
 				// Wrong answer, but jokers available
-				alert('Wrong answer! Try using a joker or guess again.');
+				toast.push('Wrong answer! Try using a joker or guess again.', {
+					theme: {
+						'--toastBackground': '#F56565',
+						'--toastColor': 'white',
+						'--toastBarBackground': '#C53030'
+					}
+				});
+				shakeScreen = true;
+				setTimeout(() => {
+					shakeScreen = false;
+				}, 500);
 			}
 		}
 	}
@@ -74,7 +86,7 @@
 	}
 </script>
 
-<div class="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
+<div class="w-full max-w-md rounded-lg bg-white p-8 shadow-md" class:shake={shakeScreen}>
 	<h2 class="mb-4 text-2xl font-bold">Question {$currentQuestionIndex + 1}</h2>
 	<p class="mb-2 text-sm font-semibold text-gray-500">Category: {currentQuestion?.category}</p>
 	<p class="mb-2 text-lg font-bold text-blue-600">Current Score: {$score} points</p>
@@ -106,3 +118,27 @@
 		</button>
 	</div>
 </div>
+
+<style>
+	@keyframes shake {
+		0% {
+			transform: translateX(0);
+		}
+		25% {
+			transform: translateX(5px);
+		}
+		50% {
+			transform: translateX(-5px);
+		}
+		75% {
+			transform: translateX(5px);
+		}
+		100% {
+			transform: translateX(0);
+		}
+	}
+
+	.shake {
+		animation: shake 0.5s ease-in-out;
+	}
+</style>
